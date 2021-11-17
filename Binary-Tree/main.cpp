@@ -1,13 +1,11 @@
-/*
-** Binary Search Tree implementation in C++
-** Harish R
-*/
 #include<iostream>
 using namespace std;
 
-class BST {
+class binarySearch 
+{
 
-    struct node {
+    struct node 
+    {
         int data;
         node* left;
         node* right;
@@ -15,7 +13,8 @@ class BST {
 
     node* root;
 
-    node* makeEmpty(node* t) {
+    node* makeEmpty(node* t) 
+    {
         if (t == NULL)
             return NULL;
         {
@@ -51,7 +50,8 @@ class BST {
             return findMin(t->left);
     }
 
-    node* findMax(node* t) {
+    node* findMax(node* t) 
+    {
         if (t == NULL)
             return NULL;
         else if (t->right == NULL)
@@ -60,7 +60,8 @@ class BST {
             return findMax(t->right);
     }
 
-    node* remove(int x, node* t) {
+    node* remove(int x, node* t) 
+    {
         node* temp;
         if (t == NULL)
             return NULL;
@@ -87,7 +88,8 @@ class BST {
         return t;
     }
 
-    void inorder(node* t) {
+    void inorder(node* t) 
+    {
         if (t == NULL)
             return;
         inorder(t->left);
@@ -95,7 +97,8 @@ class BST {
         inorder(t->right);
     }
 
-    node* find(node* t, int x) {
+    node* find(node* t, int x) 
+    {
         if (t == NULL)
             return NULL;
         else if (x < t->data)
@@ -107,34 +110,46 @@ class BST {
     }
 
 public:
-    BST() {
+    //constructor
+    binarySearch() 
+    {
         root = NULL;
     }
 
-    ~BST() {
+    //destructor 
+    ~binarySearch() 
+    {
         root = makeEmpty(root);
     }
 
+    //insert
     void insert(int x) {
         root = insert(x, root);
     }
 
-    void remove(int x) {
+    //remove
+    void remove(int x) 
+    {
         root = remove(x, root);
     }
 
-    void display() {
+    //display
+    void display() 
+    {
         inorder(root);
         cout << endl;
     }
 
-    void search(int x) {
+    //search
+    void search(int x) 
+    {
         root = find(root, x);
     }
 };
 
-int main() {
-    BST t;
+int main() 
+{
+    binarySearch t;
     t.insert(20);
     t.insert(25);
     t.insert(15);
