@@ -1,161 +1,186 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
+using namespace std;
 
-struct node
-{
-	struct node* prev;
-	int data;
-	struct node* next;
+// A doubly linked list node
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
 };
 
-//inserting a node in an empty list
-struct node* addToEmpty(struct node* head, int data)
+void insertNode(struct Node** head, int new_data)
 {
-	struct node* temp = malloc(sizeof(struct node));
-	head->prev = NULL;
-	head->data = data;
-	head->next = NULL;
-	head = temp;
-	return head;
-};
+    //allocate memory for New node
+    struct Node* newNode = new Node;
 
-//inserting at the beginning
-struct node* addAtBeg(struct node* head, int data)
+    newNode->data = new_data;
+
+    newNode->next = (*head);
+    newNode->prev = NULL;
+
+    if ((*head) != NULL)
+        (*head)->prev = newNode;
+
+    /*move the head to point to the new node */
+    (*head) = newNode;
+}
+
+//inserts node at the front of the list
+void pushFront(struct Node** head, int new_data)
 {
-	struct node* temp = malloc(sizeof(struct node));
-	head->prev = NULL;
-	head->data = data;
-	head->next = NULL;
-	temp->next = head;
-	head->prev = temp;
-	head = temp;
-	return head;
-};
+    //allocate memory for New node
+    struct Node* newNode = new Node;
 
-//inserting at the end
-struct node* addAtEnd(struct node* head, int data)
+    //assign data to new node
+    newNode->data = new_data;
+
+    newNode->next = (*head);
+    newNode->prev = NULL;
+
+    //previous of head is new node
+    if ((*head) != NULL)
+        (*head)->prev = newNode;
+
+    (*head) = newNode;
+}
+
+//insert a new node at the end of the list
+void pushBack(struct Node** head, int new_data)
 {
-	struct node* temp, *tp;
-	temp = malloc(sizeof(struct node));
-	head->prev = NULL;
-	head->data = data;
-	head->next = NULL;
+    struct Node* newNode = new Node;
+    struct Node* last = *head;
+    newNode->data = new_data;
+    newNode->next = NULL;
 
-	tp = head;
-	while (tp->next != NULL)
-	{
-		tp = tp->next;
-	}
+    //check if list is empty, if yes make new node the head of list
+    if (*head == NULL) {
+        newNode->prev = NULL;
+        *head = newNode;
+        return;
+    }
+    while (last->next != NULL)
+        last = last->next;
 
-	tp->next = temp;
-	temp->prev = tp;
-	return head;
-};
+    last->next = newNode;
 
-//inserting after
-struct node* addAfterPos(struct node* head, int data, int position)
+    newNode->prev = last;
+    return;
+}
+
+//deletes last node in the list
+void popBack(struct Node** head) {
+    if (head != NULL) {
+        if ((*head)->next == NULL) {
+            head = NULL;
+        }
+        else {
+            Node* temp = *head;
+            while (temp->next->next != NULL)
+                temp = temp->next;
+            Node* lastNode = temp->next;
+            temp->next = NULL;
+            free(lastNode);
+        }
+    }
+}
+
+//deletes first node in the list
+void popFront(struct Node** head) {
+    if (head != NULL) {
+        Node* temp = *head;
+        *head = (*head)->next;
+        free(temp);
+        if (head != NULL)
+            (*head)->prev = NULL;
+    }
+}
+
+//delete a node
+void eraseNode(Node **head, Node *del) {
+    if (*head == NULL || del == NULL) {
+        return;
+    }
+    if (*head == del) {
+        *head = del->next;
+    }
+    if (del->next != NULL) {
+        del->next->prev = del->prev;
+    }
+    if (del->prev != NULL) {
+        del->prev->next = del->next;
+    }
+    free(del);
+    return;
+}
+
+//inserts node after previous
+void insertAfter(struct Node* prev_node, int new_data)
 {
-	struct node* newP = NULL;
-	struct node* temp = head;
-	struct node* temp2 = NULL;
-	newP = addToEmpty(newP, data);
+    //check if prev node is null
+    if (prev_node == NULL) {
+        cout << "Previous node is required , it cannot be NULL \n";
+        return;
+    }
 
-	while (position != 1)
-	{
-		temp = temp->next;
-		position--;
-	}
+    struct Node* newNode = new Node;
+    newNode->data = new_data;
+    newNode->next = prev_node->next;
+    prev_node->next = newNode;
+    newNode->prev = prev_node;
+    if (newNode->next != NULL)
+        newNode->next->prev = newNode;
+}
 
-	//add node at the end of the list
-	if (temp->next == NULL)
-	{
-		temp->next = newP;
-		newP->prev = temp;
-	}
-	else 
-	{
-		temp2 = temp->next;
-		temp->next = newP;
-		temp2->prev = newP;
-		newP->next = temp2;
-		newP->prev = temp;
-	}
-	return head;
-};
-
-//inserting after
-struct node* addBeforePos(struct node* head, int data, int position)
+//inserts node before previous
+void insertBefore(struct Node* next_node, int new_data)
 {
-	struct node* newP = NULL;
-	struct node* temp = head;
-	struct node* temp2 = NULL;
-	newP = addToEmpty(newP, data);
+    //check if after node is null
+    if (next_node == NULL) {
+        cout << "Next node is required , it cannot be NULL \n";
+        return;
+    }
 
-	int pos = position;
+    struct Node* newNode = new Node;
+    newNode->data = new_data;
+    newNode->prev = next_node->prev;
+    next_node->prev = newNode;
+    newNode->next = next_node;
+    if (newNode->prev != NULL)
+        newNode->prev->next = newNode;
+}
 
-	while (pos > 2)
-	{
-		temp = temp->next;
-		position--;
-	}
+//prints contents of linked list starting from the given node
+void displayList(struct Node* node) {
+    struct Node* last;
 
-	//add node at the begining of the list
-	if (position == 1)
-	{
-		head = addAtBeg(head, data);
-	}
-	else
-	{
-		temp2 = temp->next;
-		temp->next = newP;
-		temp2->prev = newP;
-		newP->next = temp2;
-		newP->prev = temp;
-	}
-	return head;
-};
+    while (node != NULL) {
+        cout << node->data << "<==>";
+        last = node;
+        node = node->next;
+    }
+    if (node == NULL)
+        cout << "NULL";
+}
 
-//doubly linked list
-struct node* createList(struct node* head)
-{
-	int n, data, i;
-	printf("Enter the number of nodes: ");
-	scanf_s("%d", &n);
-
-	if (n == 0)
-	{
-		return head;
-	}
-
-	printf("Enter the element for node 1: ");
-	scanf_s("%d", &data);
-	head = addToEmpty(head, data);
-
-	for (i = 1; i < n; i++)
-	{
-		printf("Enter the element for node %d: ", i + 1);
-		scanf_s("%d", &data);
-		head = addToEmpty(head, data);
-	}
-	return head;
-};
-
+//main program
 int main() {
-	struct node* head = NULL;
-	struct node* ptr;
-	//int position = 3;
-	//head = addToEmpty(head, 10);
-	//head = addAtBeg(head, 20);
-	//head = addAtEnd(head, 9);
-	//head = addAfterPos(head, 44, position);
-	//head = addBeforePos(head, 55, position);
+    struct Node* head = NULL;
 
-	head = createList(head);
+    insertNode(&head, 2);
+    pushFront(&head, 20);
+    pushBack(&head, 40);
+    pushFront(&head, 45);
+    pushBack(&head, 25);
+    //insertAfter(head->next, 30);
+    
 
-	ptr = head;
-	while (ptr != NULL)
-	{
-		printf("%d ", ptr->data);
-		ptr = ptr->next;
-	}
+    cout << "Linked list before deletion:" << endl;
+    displayList(head);
+
+    cout << "\nLinked list after deletion: " << endl;
+    eraseNode(&head, head->next);
+    popFront(&head);
+    popBack(&head);
+    displayList(head);
+    return 0;
 }
