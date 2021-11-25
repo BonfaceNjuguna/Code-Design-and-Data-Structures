@@ -1,0 +1,4 @@
+﻿  main.cpp
+D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\main.cpp(14,9): error C3861: 'addToEmpty': identifier not found
+D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\main.cpp(22,49): error C2440: 'initializing': cannot convert from 'void *' to 'node *'
+D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\main.cpp(22,20): message : Conversion from 'void*' to pointer to non-'void' requires an explicit cast
