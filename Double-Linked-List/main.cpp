@@ -96,7 +96,7 @@ void popFront(struct Node** head) {
 }
 
 //delete a node
-void eraseNode(Node **head, Node *del) {
+void eraseNode(Node** head, Node* del) {
     if (*head == NULL || del == NULL) {
         return;
     }
