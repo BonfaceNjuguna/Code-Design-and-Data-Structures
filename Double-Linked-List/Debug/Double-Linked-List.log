@@ -1,2 +1,4 @@
 ﻿  main.cpp
+D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\main.cpp(241,16): warning C4101: 'i': unreferenced local variable
+D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\main.cpp(276): warning C4715: 'getNth': not all control paths return a value
   Double-Linked-List.vcxproj -> D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Double-Linked-List\Debug\Double-Linked-List.exe
