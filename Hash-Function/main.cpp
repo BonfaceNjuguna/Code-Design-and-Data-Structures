@@ -9,7 +9,7 @@
 
 using namespace std;
 
-unsigned int HashFunction(const string& input) {
+unsigned int BadHashFunction(const string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -18,7 +18,7 @@ unsigned int HashFunction(const string& input) {
     return hash_value;
 }
 
-unsigned int BadHashFunction(const string& input) {
+unsigned int HashFunction(const string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -29,38 +29,42 @@ unsigned int BadHashFunction(const string& input) {
 
 int main() {
 
-    std::vector<string> words;
+    struct Info
+    {
+        string key;
+        int phone;
+    };
 
-    ifstream infile("text.txt", ios::in);
+    vector<Info> phonebook;
+
+    ifstream infile("info.txt", ios::in);
     while (!infile.eof())
     {
         string line;
         getline(infile, line);
         istringstream is{ line };
-        string word;
 
-        while (is >> word)
-        {
-            words.push_back(word);
-        }
+        string name;
+        string phone;
+
+        getline(is, name, ',');
+        getline(is, phone);
+
+        phonebook.push_back(Info{ name, stoi(phone) });
     }
 
     //hash count
-    constexpr int buckets = 100000;
-    vector < vector<string> >hash_map;
+    constexpr int buckets = 6;
+    vector < vector<Info> >hash_map;
     hash_map.resize(buckets);
 
     //fill in the hash map
-    for (auto& w : words)
+    for (auto& i : phonebook)
     {
-        unsigned int hash = HashFunction(w) % hash_map.size();
-        hash_map[hash].push_back(w);
+        unsigned int hash = HashFunction(i.key) % hash_map.size();
+        hash_map[hash].push_back(i);
     }
 
-    /*for (auto& b : hash_map)
-    {
-        sort(b.begin(), b.end());
-    }*/
 
     while (true)
     {
@@ -68,48 +72,34 @@ int main() {
         cout << endl << endl << "Enter search key " << endl;
         cin >> search_key;
 
-        //naive count
-        auto now = chrono::high_resolution_clock::now();
-        //int inaive = count(words.begin(), words.end(), search_key);
-        bool inaive_found = find(words.begin(), words.end(), search_key) != words.end();
-        auto duration_naive = chrono::high_resolution_clock::now() - now;
 
         //hash count
-        now = chrono::high_resolution_clock::now();
+        auto now = chrono::high_resolution_clock::now();
         unsigned int bucket_number = HashFunction(search_key) % hash_map.size();
         auto& bucket = hash_map[bucket_number];
 
-        //int ihash = count(bucket.begin(), bucket.end(), search_key);
-        bool ihash_found = find(bucket.begin(), bucket.end(), search_key) != bucket.end();
-        //bool ihash_found = binary_search(bucket.begin(), bucket.end(), search_key);
-        auto duration_hash = chrono::high_resolution_clock::now() - now;
-        //assert(ihash == inaive);
-
-        if (inaive_found)
+        //int info = find_if(bucket.begin(), bucket.end(), [&](const Info& i) {return i.key == search_key; })->phone;
+        int info = -1;
+        for (auto& i : bucket)
         {
-            cout << "I found " << search_key << endl;
+            if (i.key == search_key)
+            {
+                info = i.phone;
+                break;
+            }
+        }
+
+        auto duration_hash = chrono::high_resolution_clock::now() - now;
+
+        if (info != -1)
+        {
+            cout << "I found " << search_key << " phone number " << info << endl;
         }
         else 
         {
             cout << search_key << " not found" << endl;
         }
-        cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_naive).count() << " ms for the naive search" << endl;
-
-        if (ihash_found)
-        {
-            cout << "I found " << search_key << endl;
-        }
-        else
-        {
-            cout << search_key << " not found" << endl;
-        }
         cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_hash).count() << " ms for the hash search" << endl;
-
-       /* cout << "I found " << inaive << " occurences of " << search_key << endl;
-        cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_naive).count() << " ms for the naive search" << endl;
-
-        cout << "I found " << ihash << " occurences of " << search_key << endl;
-        cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_hash).count() << " ms for the hash search" << endl;*/
     }
 
     return 0;
