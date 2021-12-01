@@ -6,20 +6,13 @@ using namespace std;
 int main()
 {
 	binarySearch t;
-	t.insert(20);
+	t.insert(50);
 	t.insert(25);
-	t.insert(15);
-	t.insert(10);
-	t.insert(30);
-	t.display();
-	t.remove(20);
+	t.insert(75);
+	t.insert(13);
+	t.insert(37);
 	t.display();
 	t.remove(25);
-	t.display();
-	t.remove(30);
-	t.display();
-	t.search(5);
-	cout << "the value:" << endl;
 	t.display();
 	return 0;
 }

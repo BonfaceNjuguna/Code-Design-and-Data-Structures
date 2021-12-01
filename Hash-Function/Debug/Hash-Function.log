@@ -1,5 +1,2 @@
-﻿  HashFunction.cpp
-D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Hash-Function\HashFucntion.h(14,21): error C2321: 'default' is a keyword, and cannot be used in this context
-  main.cpp
-D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Hash-Function\HashFucntion.h(14,21): error C2321: 'default' is a keyword, and cannot be used in this context
-  Generating Code...
+﻿  main.cpp
+  Hash-Function.vcxproj -> D:\AIE\Code Design and Data Structures\Code Design and Data Structures\Hash-Function\Debug\Hash-Function.exe

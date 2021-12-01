@@ -1,16 +1,26 @@
 #include "HashFucntion.h"
 
-namespace HashFunction {
+#include <vector>
+#include <string>
+#include <fstream>
+#include <chrono>
+#include <iostream>
+#include <sstream>
+#include <assert.h>
 
-    // implementation of a basic addition hash
-    unsigned int badHash(const char* data, unsigned int length) {
-        unsigned int hash = 0;
+//using namespace std;
 
-        for (unsigned int i = 0; i < length; ++i)
-            hash += data[i];
-
-        return hash;
-    }
+//namespace HashFunction {
+//
+//    // implementation of a basic addition hash
+//    unsigned int badHash(const char* data, unsigned int length) {
+//        unsigned int hash = 0;
+//
+//        for (unsigned int i = 0; i < length; ++i)
+//            hash += data[i];
+//
+//        return hash;
+//    }
 
     //// m_loadedTextures is a std::map< unsigned int, Texture* >
     //Texture* loadTexture(const char* filename) {
@@ -34,6 +44,3 @@ namespace HashFunction {
     //    else
     //        return iter.second;
     //}
-
-}
-
