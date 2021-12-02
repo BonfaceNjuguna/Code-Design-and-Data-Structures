@@ -1,106 +1,136 @@
-#include <vector>
-#include <string>
-#include <fstream>
-#include <chrono>
-#include <iostream>
-#include <sstream>
-#include <assert.h>
-#include <algorithm>
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include<cstdio>
 
 using namespace std;
 
-unsigned int BadHashFunction(const string& input) {
-    unsigned int hash_value = 0;
-    for (const auto& c : input)
-    {
-        hash_value = hash_value * 1313 + (unsigned char)c;
-    }
-    return hash_value;
-}
 
-unsigned int HashFunction(const string& input) {
-    unsigned int hash_value = 0;
-    for (const auto& c : input)
-    {
-        hash_value += (unsigned char)c;
+const int bucket = 200;
+
+class HashTableEntry {
+public:
+    int age;
+    string name;
+    string address;
+    HashTableEntry(int age, string name, string address) {
+        this->age = age;
+        this->name = name;
+        this->address = address;
     }
-    return hash_value;
-}
+};
+
+class HashMapTable {
+
+private:
+    HashTableEntry** t;
+public:
+    HashMapTable() {
+        t = new HashTableEntry * [bucket];
+        for (int i = 0; i < bucket; i++) {
+            t[i] = NULL;
+        }
+    }
+
+    //my hashFunc
+    int HashFunc(int k) {
+        return k % bucket;
+    }
+
+    //insert
+    void Insert(int k, string v, string n) {
+        int h = HashFunc(k);
+        while (t[h] != NULL && t[h]->name != v) {
+            h = HashFunc(h + 1);
+        }
+        if (t[h] != NULL)
+            delete t[h];
+        t[h] = new HashTableEntry(k, v, n);
+    }
+
+    //searchkey
+    int SearchKey(int k) {
+        int h = HashFunc(k);
+        while (t[h] != NULL && t[h]->age != k) {
+            h = HashFunc(h + 1);
+        }
+        if (t[h] == NULL)
+            return -1;
+        else
+            return t[h]->age;
+    }
+
+    //remove key
+    void Remove(int k) {
+        int h = HashFunc(k);
+        while (t[h] != NULL) {
+            if (t[h]->age == k)
+                break;
+            h = HashFunc(h + 1);
+        }
+        if (t[h] == NULL) {
+            cout << "No Element found at key " << k << endl;
+            return;
+        }
+        else {
+            delete t[h];
+        }
+        cout << "Element Deleted" << endl;
+    }
+    ~HashMapTable() {
+        for (int i = 0; i < bucket; i++) {
+            if (t[i] != NULL)
+                delete t[i];
+            delete[] t;
+        }
+    }
+};
 
 int main() {
-
-    struct Info
-    {
-        string key;
-        long int phone;
-    };
-
-    vector<Info> phonebook;
-
-    ifstream infile("info.txt", ios::in);
-    while (!infile.eof())
-    {
-        string line;
-        getline(infile, line);
-        istringstream is{ line };
-
-        string name;
-        string phone;
-
-        getline(is, name, ',');
-        getline(is, phone);
-
-        phonebook.push_back(Info{ name, strtol(phone.c_str(),nullptr,10) });
-    }
-
-    //hash count
-    constexpr int buckets = 6;
-    vector < vector<Info> >hash_map;
-    hash_map.resize(buckets);
-
-    //fill in the hash map
-    for (auto& i : phonebook)
-    {
-        unsigned int hash = HashFunction(i.key) % hash_map.size();
-        hash_map[hash].push_back(i);
-    }
-
-
-    while (true)
-    {
-        string search_key;
-        cout << endl << endl << "Enter search key " << endl;
-        cin >> search_key;
-
-
-        //hash count
-        auto now = chrono::high_resolution_clock::now();
-        unsigned int bucket_number = HashFunction(search_key) % hash_map.size();
-        auto& bucket = hash_map[bucket_number];
-
-        //int info = find_if(bucket.begin(), bucket.end(), [&](const Info& i) {return i.key == search_key; })->phone;
-        int info = -1;
-        for (auto& i : bucket)
-        {
-            if (i.key == search_key)
-            {
-                info = i.phone;
-                break;
+    HashMapTable hash;
+    int k;
+    string v;
+    string n;
+    int c;
+    while (1) {
+        cout << "1.Insert element into the table" << endl;
+        cout << "2.Search element from the key" << endl;
+        cout << "3.Delete element at a key" << endl;
+        cout << "4.Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> c;
+        switch (c) {
+        case 1:
+            cout << "Enter name: ";
+            cin >> v;
+            cout << "Enter age: ";
+            cin >> k;
+            cout << "Enter address: ";
+            cin >> n;
+            hash.Insert(k, v, n);
+            break;
+        case 2:
+            cout << "Enter name to be searched: ";
+            cin >> k;
+            if (hash.SearchKey(k) == -1) {
+                cout << "No name found at key " << k << endl;
+                continue;
             }
+            else {
+                cout << "Information at key " << v << n << " : ";
+                cout << hash.SearchKey(k) << endl;
+            }
+            break;
+        case 3:
+            cout << "Enter key to be deleted: ";
+            cin >> k;
+            hash.Remove(k);
+            break;
+        case 4:
+            exit(1);
+        default:
+            cout << "\nEnter correct option\n";
         }
-
-        auto duration_hash = chrono::high_resolution_clock::now() - now;
-
-        if (info != -1)
-        {
-            cout << "I found " << search_key << " phone number " << info << endl;
-        }
-        else 
-        {
-            cout << search_key << " not found" << endl;
-        }
-        cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_hash).count() << " ms for the hash search" << endl;
     }
-
     return 0;
 }
