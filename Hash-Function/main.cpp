@@ -32,7 +32,7 @@ int main() {
     struct Info
     {
         string key;
-        int phone;
+        long int phone;
     };
 
     vector<Info> phonebook;
@@ -50,7 +50,7 @@ int main() {
         getline(is, name, ',');
         getline(is, phone);
 
-        phonebook.push_back(Info{ name, stoi(phone) });
+        phonebook.push_back(Info{ name, strtol(phone.c_str(),nullptr,10) });
     }
 
     //hash count
