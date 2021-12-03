@@ -9,7 +9,7 @@
 
 using namespace std;
 
-unsigned int BadHashFunction(const string& input) {
+unsigned int HashFunction(const string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -18,7 +18,7 @@ unsigned int BadHashFunction(const string& input) {
     return hash_value;
 }
 
-unsigned int HashFunction(const string& input) {
+unsigned int BadHashFunction(const string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -32,11 +32,11 @@ int main() {
     struct Info
     {
         string key;
-        long int phone;
+        long int age;
         string address;
     };
 
-    vector<Info> phonebook (3);
+    vector<Info> data (3);
 
     ifstream infile("info.txt", ios::in);
     while (!infile.eof())
@@ -46,14 +46,14 @@ int main() {
         istringstream is{ line };
 
         string name;
-        string phone;
+        string age;
         string address;
 
         getline(is, name, ',');
-        getline(is, phone, ',');
+        getline(is, age, ',');
         getline(is, address);
 
-        phonebook.push_back(Info{ name, strtol(phone.c_str(),nullptr,10) , address});
+        data.push_back(Info{ name, strtol(age.c_str(),nullptr,10) , address});
     }
 
     //hash count
@@ -62,7 +62,7 @@ int main() {
     hash_map.resize(buckets);
 
     //fill in the hash map
-    for (auto& i : phonebook)
+    for (auto& i : data)
     {
         unsigned int hash = HashFunction(i.key) % hash_map.size();
         hash_map[hash].push_back(i);
@@ -82,20 +82,13 @@ int main() {
         auto& bucket = hash_map[bucket_number];
 
         //int info = find_if(bucket.begin(), bucket.end(), [&](const Info& i) {return i.key == search_key; })->phone;
-        int info = -1;
+        int dob = -1;
         string location;
         for (auto& i : bucket)
         {
             if (i.key == search_key)
             {
-                info = i.phone;
-                break;
-            }
-        }
-        for (auto& i : bucket)
-        {
-            if (i.key == search_key)
-            {
+                dob = i.age;
                 location = i.address;
                 break;
             }
@@ -103,9 +96,9 @@ int main() {
 
         auto duration_hash = chrono::high_resolution_clock::now() - now;
 
-        if (info != -1)
+        if (dob != -1)
         {
-            cout << "I found " << search_key << " phone number " << info << " address " << location << endl;
+            cout << "I found " << search_key << " age " << dob << " address " << location << endl;
         }
         else
         {

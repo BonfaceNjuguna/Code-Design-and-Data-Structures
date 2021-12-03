@@ -8,10 +8,9 @@ namespace HashFunction {
     // implementation of a basic addition hash
     //unsigned int badHash(const char* data, unsigned int length);
 
-    // ADD YOUR FUNCTIONS HERE
-   // m_loadedTextures is a std::map< unsigned int, Texture* >
+    //unsigned int HashFunction(const string& input);
 
-    //Texture* getTexture(unsigned int ID);
+    // ADD YOUR FUNCTIONS HERE
 
     // a helper to access a default hash function
     //static HashFunc default = badHash;
