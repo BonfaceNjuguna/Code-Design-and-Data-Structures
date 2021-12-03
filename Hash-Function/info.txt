@@ -1,6 +1,6 @@
-Bonface,lodwar,24
-Ayako,nakuru,33
-Kabiru,kitale,54
-Esther,nairobi,50
-Cnaeus,austia,54
-Crescencia,LA,23
+Bonface,24,Lodwar
+Ayako,33,Kisumu
+Kabiru,54,Nakuru
+Esther,50,Nandi
+Cnaeus,54,Austria
+Crescencia,23,LA
