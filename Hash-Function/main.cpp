@@ -93,9 +93,9 @@ int main() {
     string n;
     int c;
     while (1) {
-        cout << "1.Insert element into the table" << endl;
-        cout << "2.Search element from the key" << endl;
-        cout << "3.Delete element at a key" << endl;
+        cout << "1.Insert" << endl;
+        cout << "2.Search" << endl;
+        cout << "3.Delete" << endl;
         cout << "4.Exit" << endl;
         cout << "Enter your choice: ";
         cin >> c;
@@ -110,19 +110,19 @@ int main() {
             hash.Insert(k, v, n);
             break;
         case 2:
-            cout << "Enter name to be searched: ";
+            cout << "Search age: ";
             cin >> k;
             if (hash.SearchKey(k) == -1) {
-                cout << "No name found at key " << k << endl;
+                cout << "No name found with age " << k << endl;
                 continue;
             }
             else {
-                cout << "Information at key " << v << n << " : ";
-                cout << hash.SearchKey(k) << endl;
+                cout << "Information with age: " << hash.SearchKey(k) << " : " << v << " " << " address:" << n << endl;
+                /*cout << hash.SearchKey(k) << endl;*/
             }
             break;
         case 3:
-            cout << "Enter key to be deleted: ";
+            cout << "Enter age to be deleted: ";
             cin >> k;
             hash.Remove(k);
             break;
