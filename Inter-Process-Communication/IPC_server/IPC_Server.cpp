@@ -1,11 +1,6 @@
 #include <iostream>
-#include <stdio.h>
+#include <conio.h>
 #include <Windows.h>
-#include <string>
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <array>
 
 
 using namespace std;
@@ -34,7 +29,10 @@ int main() {
 	{
 		cout << "CreateFileMapping Failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "CreateFileMapping Success" << endl;
+	else 
+	{
+		cout << "CreateFileMapping Success" << endl;
+	}
 
 	//map view of file
 	lpBuffer = (PCHAR)MapViewOfFile(
@@ -47,7 +45,10 @@ int main() {
 	{
 		cout << "MapViewOfFile failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "MapViewOfFile Success" << endl;
+	else 
+	{
+		cout << "MapViewOfFile Success" << endl;
+	}
 
 	//copy memory
 	CopyMemory(lpBuffer, Buffer, szBuffer);
@@ -58,8 +59,13 @@ int main() {
 	{
 		cout << "UnMapViewOfFile failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "UnMapViewOfFile Success" << endl;
-
-	system("PAUSE");
+	else 
+	{
+		cout << "UnMapViewOfFile Success" << endl;
+	}
+	
+	// wait for a keypress to close
+	_getch();
+	//system("PAUSE");
 	return 0;
 }

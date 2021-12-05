@@ -1,4 +1,5 @@
 #include <iostream>
+#include <conio.h>
 #include <Windows.h>
 
 using namespace std;
@@ -24,7 +25,11 @@ int main() {
 	{
 		cout << "OpenFileMapping Failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "OpenFileMapping Success" << endl;
+	else 
+	{
+		cout << "OpenFileMapping Success" << endl;
+	}
+	
 
 	//map view of file
 	lpBuffer = (PCHAR)MapViewOfFile(
@@ -37,8 +42,10 @@ int main() {
 	{
 		cout << "MapViewOfFile failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "MapViewOfFile Success" << endl;
-
+	else {
+		cout << "MapViewOfFile Success" << endl;
+	}
+	
 	//reading the data from file map object
 	cout << "READING DATA FROM SERVER" << lpBuffer << endl;
 
@@ -48,11 +55,15 @@ int main() {
 	{
 		cout << "UnMapViewOfFile failed and Error No: " << GetLastError() << endl;
 	}
-	cout << "UnMapViewOfFile Success" << endl;
+	else 
+	{
+		cout << "UnMapViewOfFile Success" << endl;
+	}
 
 	//close handle
 	CloseHandle(hFileMap);
 
-	system("PAUSE");
+	_getch();
+	//system("PAUSE");
 	return 0;
 }
