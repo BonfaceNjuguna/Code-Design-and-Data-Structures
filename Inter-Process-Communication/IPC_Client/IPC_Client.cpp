@@ -1,69 +1,57 @@
-#include <iostream>
-#include <conio.h>
-#include <Windows.h>
+/*******************************************************************************************
+*
+*   raylib [core] example - Basic window
+*
+*   Welcome to raylib!
+*
+*   To test examples, just press F6 and execute raylib_compile_execute script
+*   Note that compiled executable is placed in the same folder as .c file
+*
+*   You can find all basic examples on C:\raylib\raylib\examples folder or
+*   raylib official webpage: www.raylib.com
+*
+*   Enjoy using raylib. :)
+*
+*   This example has been created using raylib 1.0 (www.raylib.com)
+*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*
+*   Copyright (c) 2014 Ramon Santamaria (@raysan5)
+*
+********************************************************************************************/
 
-using namespace std;
+#include "raylib.h"
+#include "EntityEditorApp.h"
 
-int main() {
+int main(int argc, char* argv[])
+{
+    float deltaTime = 0;
+    EntityEditorApp app(800, 450);
 
-	cout << "\t\t.....IPC Client......" << endl;
-	cout << endl;
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    app.Startup();
+    //--------------------------------------------------------------------------------------
 
-	//Local variables definition
-	HANDLE	hFileMap;
-	BOOL	bResult;
-	PCHAR	lpBuffer = NULL;
-	char	Buffer[1024] = "Hello from Client";
-	size_t	szBuffer = sizeof(Buffer);
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        deltaTime = GetFrameTime();
 
-	//open file mapping
-	hFileMap = OpenFileMapping(
-		FILE_MAP_ALL_ACCESS,
-		FALSE,
-		L"Local\\MyFileMap");
-	if (hFileMap == NULL)
-	{
-		cout << "OpenFileMapping Failed and Error No: " << GetLastError() << endl;
-	}
-	else 
-	{
-		cout << "OpenFileMapping Success" << endl;
-	}
-	
+        // Update
+        //----------------------------------------------------------------------------------
+        app.Update(deltaTime);
+        //----------------------------------------------------------------------------------
 
-	//map view of file
-	lpBuffer = (PCHAR)MapViewOfFile(
-		hFileMap,
-		FILE_MAP_ALL_ACCESS,
-		0,
-		0,
-		256);
-	if (lpBuffer == NULL)
-	{
-		cout << "MapViewOfFile failed and Error No: " << GetLastError() << endl;
-	}
-	else {
-		cout << "MapViewOfFile Success" << endl;
-	}
-	
-	//reading the data from file map object
-	cout << "READING DATA FROM SERVER" << lpBuffer << endl;
+        // Draw
+        //----------------------------------------------------------------------------------
+        app.Draw();
+        //----------------------------------------------------------------------------------
+    }
 
-	//unmap view of file
-	bResult = UnmapViewOfFile(lpBuffer);
-	if (bResult == FALSE)
-	{
-		cout << "UnMapViewOfFile failed and Error No: " << GetLastError() << endl;
-	}
-	else 
-	{
-		cout << "UnMapViewOfFile Success" << endl;
-	}
+    // De-Initialization
+    //--------------------------------------------------------------------------------------   
+    app.Shutdown();
+    //--------------------------------------------------------------------------------------
 
-	//close handle
-	CloseHandle(hFileMap);
-
-	_getch();
-	//system("PAUSE");
-	return 0;
+    return 0;
 }
