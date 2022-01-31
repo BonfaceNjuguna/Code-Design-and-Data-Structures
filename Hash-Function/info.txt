@@ -1,4 +1,4 @@
-Bonface,24,Lodwar
+bonface,24,Lodwar
 Ayako,33,Kisumu
 Kabiru,54,Nakuru
 Esther,50,Nandi

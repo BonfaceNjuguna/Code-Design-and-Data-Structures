@@ -7,9 +7,8 @@
 #include <assert.h>
 #include <algorithm>
 
-using namespace std;
 
-unsigned int HashFunction(const string& input) {
+unsigned int HashFunction(const std::string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -18,7 +17,7 @@ unsigned int HashFunction(const string& input) {
     return hash_value;
 }
 
-unsigned int BadHashFunction(const string& input) {
+unsigned int BadHashFunction(const std::string& input) {
     unsigned int hash_value = 0;
     for (const auto& c : input)
     {
@@ -27,27 +26,28 @@ unsigned int BadHashFunction(const string& input) {
     return hash_value;
 }
 
+int menu();
 int main() {
 
     struct Info
     {
-        string key;
+        std::string key;
         long int age;
-        string address;
+        std::string address;
     };
 
-    vector<Info> data (3);
+    std::vector<Info> data (3);
 
-    ifstream infile("info.txt", ios::in);
+    std::ifstream infile("info.txt", std::ios::in);
     while (!infile.eof())
     {
-        string line;
-        getline(infile, line);
-        istringstream is{ line };
+        std::string line;
+        std::getline(infile, line);
+        std::istringstream is{ line };
 
-        string name;
-        string age;
-        string address;
+        std::string name;
+        std::string age;
+        std::string address;
 
         getline(is, name, ',');
         getline(is, age, ',');
@@ -58,7 +58,7 @@ int main() {
 
     //hash count
     constexpr int buckets = 6;
-    vector < vector<Info> >hash_map;
+    std::vector < std::vector<Info> >hash_map;
     hash_map.resize(buckets);
 
     //fill in the hash map
@@ -68,44 +68,66 @@ int main() {
         hash_map[hash].push_back(i);
     }
 
-
-    while (true)
-    {
-        string search_key;
-        cout << endl << endl << "Enter search key " << endl;
-        cin >> search_key;
-
-
-        //hash count
-        auto now = chrono::high_resolution_clock::now();
-        unsigned int bucket_number = HashFunction(search_key) % hash_map.size();
-        auto& bucket = hash_map[bucket_number];
-
-        //int info = find_if(bucket.begin(), bucket.end(), [&](const Info& i) {return i.key == search_key; })->phone;
-        int dob = -1;
-        string location;
-        for (auto& i : bucket)
+        for (auto choice(menu()); choice != 2; choice = menu())
         {
-            if (i.key == search_key)
+            switch (choice)
             {
-                dob = i.age;
-                location = i.address;
-                break;
+                case 1:
+                {
+
+                    std::string search_key;
+                    /*cout << endl << endl << "Enter search key " << endl;*/
+                    std::cin >> search_key;
+
+                    //hash count
+                    auto now = std::chrono::high_resolution_clock::now();
+                    unsigned int bucket_number = HashFunction(search_key) % hash_map.size();
+                    auto& bucket = hash_map[bucket_number];
+
+                    //int info = find_if(bucket.begin(), bucket.end(), [&](const Info& i) {return i.key == search_key; })->phone;
+                    int dob = -1;
+                    std::string location;
+                    for (auto& i : bucket)
+                    {
+                        if (i.key == search_key)
+                        {
+                            dob = i.age;
+                            location = i.address;
+                            break;
+                        }
+                    }
+
+                    auto duration_hash = std::chrono::high_resolution_clock::now() - now;
+
+                    if (dob != -1)
+                    {
+                        std::cout << "I found " << search_key << " age " << dob << " address " << location << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << search_key << " not found" << std::endl;
+                    }
+                    std::cout << "It took " << std::chrono::duration_cast<std::chrono::microseconds>(duration_hash).count() << " ms for the hash search" << std::endl;
+
+                    break;
+                }
             }
         }
-
-        auto duration_hash = chrono::high_resolution_clock::now() - now;
-
-        if (dob != -1)
-        {
-            cout << "I found " << search_key << " age " << dob << " address " << location << endl;
-        }
-        else
-        {
-            cout << search_key << " not found" << endl;
-        }
-        cout << "It took " << chrono::duration_cast<chrono::microseconds>(duration_hash).count() << " ms for the hash search" << endl;
     }
 
-    return 0;
+int menu()
+{
+    std::cout << " \n1. Enter search key" << std::endl;
+    std::cout << "2. Quit!" << std::endl;
+
+    int choice;
+    while (true) {
+        std::cin >> choice;
+        if (std::cin.bad()) {
+            std::cin.ignore(std::cin.rdbuf()->in_avail());
+            std::cout << "Bad input" << std::endl;
+        }
+        else break;
+    }
+    return choice;
 }
