@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "gaFUTg+1nrEaPw5svz6HN/xeD7Vxgn/FG7G6XI0PTHTlUtGBccm/M7c9kbchuDTH91GICeAIn2nuJQdYQOxveg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Bonface\\Documents\\AIEYear1Samples\\RaylibStarterCS\\RaylibStarterCS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bonface\\.nuget\\packages\\raylib-cs\\3.5.0\\raylib-cs.3.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
